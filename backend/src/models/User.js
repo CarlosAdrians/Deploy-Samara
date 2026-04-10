@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
-// função pra gerar código único
 const generateCode = () => {
   return "user_" + Math.random().toString(36).substring(2, 10);
 };
@@ -23,15 +22,13 @@ const UserSchema = new mongoose.Schema({
   }
 });
 
-// criptografar senha antes de salvar
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+// 🔥 corrigido
+UserSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
 
   this.password = await bcrypt.hash(this.password, 10);
-  next();
 });
 
-// método pra comparar senha
 UserSchema.methods.comparePassword = function (password) {
   return bcrypt.compare(password, this.password);
 };

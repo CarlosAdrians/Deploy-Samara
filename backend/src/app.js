@@ -12,12 +12,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// rota base
 app.get("/", (req, res) => {
   res.send("API rodando");
 });
 
-// rotas de autenticação
 app.use("/api/auth", authRoutes);
 
 export default app;
